@@ -1,0 +1,13 @@
+// Database Collections
+// Users
+// Products
+// Categories
+// Brands
+// Orders
+// Reviews
+// Coupons
+// Wishlists
+// Banners
+// Payments
+
+
