@@ -40,7 +40,6 @@ app.get('/', (req:Request, res:Response) => {
   res.send('Hello World!')
 })
 
-
 app.use(globalErrHandler);
 
 // 404 handler 
