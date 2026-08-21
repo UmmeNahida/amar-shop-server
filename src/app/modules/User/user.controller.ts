@@ -5,7 +5,8 @@ import * as UserService from "./user.service.js";
 import httpStatus from "http-status";
 
 export const registerUser = catchAsync(async (req, res) => {
-  const result = await UserService.registerUser(req.body);
+ 
+  const result = await UserService.registerUser(req);
 
   sendResponse(res, {
     success: true,
