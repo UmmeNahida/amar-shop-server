@@ -1,5 +1,5 @@
 import { Query, type PopulateOptions } from "mongoose";
-import { exitToruQuery } from "./constand.js";
+import { exitToruQuery } from "./constand";
 
 export class QueryModel<T> {
     public modelQuery: Query<T[], T>;
