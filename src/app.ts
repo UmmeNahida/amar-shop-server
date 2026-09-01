@@ -3,15 +3,16 @@ import { routes } from "./app/routes/routes.js"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import expressSession from "express-session"
-import { globalErrHandler } from "./app/middlewares/glovalErrHandler.js";
-import httpStatus from "http-status-codes"
-// import { routes } from "./app/routes/routes.js";
+import { globalErrHandler } from "./app/middlewares/glovalErrHandler";
+import httpStatus from "http-status-codes";
+// import { routes } from "./app/routes/routes";
 const app = express()
 
-
-// middlewere
+//body parser
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+
+//cookie parser
 app.use(cookieParser())
 
 // express-session first
@@ -22,10 +23,6 @@ app.use(expressSession({
   
 }))
 
-// // passport middlewares after session
-// app.use(passport.initialize())
-// app.use(passport.session())
-
 // cors
 app.use(cors({
   origin:["http://localhost:5173","https://assignment-6-neon-eight.vercel.app"],
@@ -35,12 +32,10 @@ app.use(cors({
 // route endpoint
 app.use('/api/v1',routes)
 
-
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello World!')
 })
 
-app.use(globalErrHandler);
 
 // 404 handler 
 app.use((req:Request, res:Response)=>{
@@ -49,6 +44,9 @@ app.use((req:Request, res:Response)=>{
     message:"Page not fount"
   })
 })  
+
+app.use(globalErrHandler);
+
 
 
 export default app;
