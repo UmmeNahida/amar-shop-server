@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AddressType } from "./user.interface.js";
+import { AddressType } from "./user.interface";
 
 export const createAddressValidationSchema = z.object({
   body: z.object({
@@ -19,7 +19,7 @@ export const createAddressValidationSchema = z.object({
       .string({
         error: "Phone number is required",
       })
-      .trim()
+      .trim() 
       .regex(
         /^(?:\+8801|01)[3-9]\d{8}$/,
         "Please enter a valid Bangladeshi phone number"
