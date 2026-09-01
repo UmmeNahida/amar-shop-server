@@ -1,35 +1,45 @@
-import { ObjectId } from "mongoose";
-import { ProductStatus } from "./product.enum";
+import { Types } from "mongoose";
 
+export enum ProductStatus {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
+
+export interface IProductImage {
+  public_id: string;
+  url: string;
+}
+
+export interface IProductVariant {
+  name: string;
+  value: string;
+  price?: number;
+  stock?: number;
+}
+
+export interface IProductSpecification {
+  key: string;
+  value: string;
+}
 
 export interface IProduct {
   name: string;
-
   slug: string;
 
   shortDescription?: string;
-
   description: string;
 
   sku: string;
 
-  category: ObjectId;
-
-  subCategory?: ObjectId;
-
-  brand?: ObjectId;
+  category: Types.ObjectId;
+  brand: Types.ObjectId;
 
   price: number;
-
   discountPrice?: number;
 
-  images: {
-    public_id: string;
-    url: string;
-  }[];
+  images: IProductImage[];
 
   stock: number;
-
   lowStockThreshold: number;
 
   rating: {
@@ -37,31 +47,20 @@ export interface IProduct {
     count: number;
   };
 
-  variants?: {
-    color?: string;
-    size?: string;
-    sku: string;
-    price: number;
-    stock: number;
-  }[];
+  variants?: IProductVariant[];
 
-  specifications?: {
-    key: string;
-    value: string;
-  }[];
+  specifications?: IProductSpecification[];
 
-  shipping: {
+  shipping?: {
     weight?: number;
     freeShipping: boolean;
     estimatedDelivery?: string;
   };
 
   isFeatured: boolean;
-
   isNewArrival: boolean;
 
   views: number;
-
   soldCount: number;
 
   status: ProductStatus;
@@ -71,8 +70,4 @@ export interface IProduct {
     description?: string;
     keywords?: string[];
   };
-
-  createdAt: Date;
-
-  updatedAt: Date;
 }
