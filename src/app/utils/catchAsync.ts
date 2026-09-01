@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { envVars } from "../confic/env.js"
+import { envVars } from "@/app/confic/env"
 
 
 type typeAsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<void>
