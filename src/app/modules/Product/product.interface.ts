@@ -42,7 +42,7 @@ export interface IProduct {
   stock: number;
   lowStockThreshold: number;
 
-  rating: {
+  rating?: {
     average: number;
     count: number;
   };
@@ -60,8 +60,8 @@ export interface IProduct {
   isFeatured: boolean;
   isNewArrival: boolean;
 
-  views: number;
-  soldCount: number;
+  views?: number;
+  soldCount?: number;
 
   status: ProductStatus;
 
