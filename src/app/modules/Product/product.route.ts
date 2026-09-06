@@ -6,6 +6,9 @@ const router = Router()
 
 router.post("/add", productController.addProduct)
 router.get("/single", productController.addProduct)
-// router.get("/all", productController.addProduct)
+router.get("/all", productController.getAllProduct)
 // router.patch("/update", productController.addProduct)
 // router.delete("/delete", productController.addProduct)
+
+
+export const productRouter = router;
