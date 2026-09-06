@@ -5,7 +5,7 @@ import * as productService from "./product.service"
 
 
 export const addProduct = catchAsync(async(req, res)=>{
-   const result = await productService.addProduct(req.body);
+   const result = await productService.createProduct(req.body);
    sendResponse(res,{
     success:true,
     statusCode: httpStatus.OK,
@@ -13,3 +13,17 @@ export const addProduct = catchAsync(async(req, res)=>{
     data:result
    })
 })
+
+
+export const getAllProduct = catchAsync(async(req, res)=>{
+   const result = await productService.getAllProduct();
+   sendResponse(res,{
+    success:true,
+    statusCode: httpStatus.OK,
+    message: "product has been retrieve successfully",
+    data:result
+   })
+})
+
+
+
