@@ -99,3 +99,9 @@ export const createProduct = async (payload: IProduct) => {
 };
 
 
+export const getAllProduct = async()=>{
+  const products = await Product.find();
+  return products
+}
+
+
