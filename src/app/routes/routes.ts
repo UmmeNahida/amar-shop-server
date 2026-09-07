@@ -4,6 +4,7 @@ import { UserRoutes } from "../modules/User/user.router";
 import { categoryRouter } from "../modules/Category/category.route.js";
 import { brandRouter } from "../modules/Brand/brand.route.js";
 import { productRouter } from "../modules/Product/product.route.js";
+import { myCartRouter } from "../modules/MyCart/myCart.route.js";
 
 export const routes = Router();
 
@@ -27,6 +28,10 @@ const moduleRoutes = [
     {
         path:"/product",
         route: productRouter
+    },
+    {
+        path:"/myCart",
+        route: myCartRouter
     },
 ]
 
