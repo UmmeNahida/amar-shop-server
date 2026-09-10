@@ -11,7 +11,6 @@ import { uploadedFiles } from "@/app/helper/datauri";
 
 export const createProduct = async (payload: IProduct, files:any) => {
   const imgFiles = await uploadedFiles(files)
-  console.log("uplodedFiles", imgFiles)
 
   // 1. Check Category
   const category = await Category.findOne({
