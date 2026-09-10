@@ -4,13 +4,12 @@ import { AuthProvider, IAddress, Role, UserStatus, type IUser } from "./user.int
 import { User } from "./user.model";
 import AppError from "@/app/ErrorHandler/appErrors";
 import { envVars } from "@/app/confic/env";
-import parseBufferToURI from "@/app/helper/datauri";
 import cloudinary from "@/app/helper/cloudinary";
 import httpStatus from "http-status-codes";
+import { parseBufferToURI } from "@/app/helper/datauri";
 
 // register
 export const registerUser = async (req: any) => {
-  console.log("---req",req)
   const isUserExists = await User.findOne({
     email: req.body.email,
   });
