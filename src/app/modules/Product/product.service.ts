@@ -6,9 +6,13 @@ import { Brand } from "../Brand/brand.model";
 import { CategoryStatus } from "../Category/category.interface";
 import AppError from "@/app/ErrorHandler/appErrors";
 import { BrandStatus } from "../Brand/brand.interface";
+import { uploadedFiles } from "@/app/helper/datauri";
 
 
-export const createProduct = async (payload: IProduct) => {
+export const createProduct = async (payload: IProduct, files:any) => {
+  const imgFiles = await uploadedFiles(files)
+  console.log("uplodedFiles", imgFiles)
+
   // 1. Check Category
   const category = await Category.findOne({
     _id: payload.category,
@@ -81,17 +85,7 @@ export const createProduct = async (payload: IProduct) => {
   // 7. Create product
   const product = await Product.create({
     ...payload,
-
-    // These values should be controlled by backend
-    rating: {
-      average: 0,
-      count: 0,
-    },
-
-    views: 0,
-
-    soldCount: 0,
-
+    images: imgFiles,
     status: payload.status,
   });
 
