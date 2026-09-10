@@ -5,7 +5,6 @@ import * as productService from "./product.service"
 
 
 export const addProduct = catchAsync(async(req, res)=>{
-  console.log("req.body:", req.body)
    const file = req.files;
    const result = await productService.createProduct(req.body, file);
    sendResponse(res,{
