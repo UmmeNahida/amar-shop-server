@@ -11,7 +11,7 @@ export const createUserTokens = (user: any) => {
     }
     const accessToken = generateToken(jwtPayload, envVars.secret, envVars.expiresIn)
 
-    const refreshToken = generateToken(jwtPayload, envVars.secret, envVars.expiresIn)
+    const refreshToken = generateToken(jwtPayload, envVars.refresh_secret, envVars.refresh_expiresIn)
 
 
     return {
