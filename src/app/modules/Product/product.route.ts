@@ -12,7 +12,7 @@ router.post(
   validateRequest(ProductValidation.createProductValidationSchema),
   productController.addProduct,
 );
-router.get("/single", productController.addProduct);
+router.get("/single", productController.getSingleProduct);
 router.get("/all", productController.getAllProduct);
 // router.patch("/update", productController.addProduct)
 // router.delete("/delete", productController.addProduct)
