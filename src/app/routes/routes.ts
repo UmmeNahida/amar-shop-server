@@ -5,39 +5,41 @@ import { categoryRouter } from "../modules/Category/category.route.js";
 import { brandRouter } from "../modules/Brand/brand.route.js";
 import { productRouter } from "../modules/Product/product.route.js";
 import { myCartRouter } from "../modules/MyCart/myCart.route.js";
+import { orderRouter } from "../modules/Order/order.route";
 
 export const routes = Router();
 
 const moduleRoutes = [
-    {
-        path:"/auth",
-        route: authRoute
-    },
-    {
-        path:"/user",
-        route: UserRoutes
-    },
-    {
-        path:"/category",
-        route: categoryRouter
-    },
-    {
-        path:"/brand",
-        route: brandRouter
-    },
-    {
-        path:"/product",
-        route: productRouter
-    },
-    {
-        path:"/myCart",
-        route: myCartRouter
-    },
-]
+  {
+    path: "/auth",
+    route: authRoute,
+  },
+  {
+    path: "/user",
+    route: UserRoutes,
+  },
+  {
+    path: "/category",
+    route: categoryRouter,
+  },
+  {
+    path: "/brand",
+    route: brandRouter,
+  },
+  {
+    path: "/product",
+    route: productRouter,
+  },
+  {
+    path: "/myCart",
+    route: myCartRouter,
+  },
+  {
+    path: "/order",
+    route: orderRouter,
+  },
+];
 
-
-moduleRoutes.forEach((route)=>{
-    routes.use(route.path, route.route)
-})
-
-
+moduleRoutes.forEach((route) => {
+  routes.use(route.path, route.route);
+});
