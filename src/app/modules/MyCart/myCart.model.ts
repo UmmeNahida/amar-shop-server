@@ -1,31 +1,42 @@
 import mongoose, { Schema } from "mongoose";
+import { ICart } from "./myCart.interface";
 
-
-const myCartSchema = new Schema({
-  userId:{
-    type: Schema.Types.ObjectId,
-    ref:"User",
-    unique: true,
-    require:true
+const cartItemSchema = new Schema<ICart["items"][0]>(
+  {
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "Quantity must be at least 1"],
+    },
+    // Price snapshot from DB — never accepted from the frontend
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
   },
-  items: [
-    {
-      productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-        require: true
-      },
-      quantity: {
-        type: Number,
-        require:true,
-        min: 1
-      },
-      price: {
-        type: Number,
-        require: true
-      }
-    }
-  ]
-})
+  { _id: true },
+);
 
-export const Cart = mongoose.model("Cart", myCartSchema)
+const cartSchema = new Schema<ICart>(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
+    items: {
+      type: [cartItemSchema],
+      default: [],
+    },
+  },
+  { timestamps: true },
+);
+
+export const Cart = mongoose.model<ICart>("Cart", cartSchema);
