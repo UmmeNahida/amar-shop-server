@@ -7,10 +7,14 @@ import { CategoryStatus } from "../Category/category.interface";
 import AppError from "@/app/ErrorHandler/appErrors";
 import { BrandStatus } from "../Brand/brand.interface";
 import { uploadedFiles } from "@/app/helper/datauri";
+import { QueryBuilder } from "@/app/utils/QueryBuilder";
+import { PRODUCT_SEARCH_FIELDS } from "@/app/utils/constand";
 
-
-export const createProduct = async (payload: IProduct, files:any) => {
-  const imgFiles = await uploadedFiles(files)
+export const createProduct = async (
+  payload: IProduct,
+  files: any,
+) => {
+  const imgFiles = await uploadedFiles(files);
 
   // 1. Check Category
   const category = await Category.findOne({
@@ -21,7 +25,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   if (!category) {
     throw new AppError(
       httpStatus.NOT_FOUND,
-      "Category not found or inactive."
+      "Category not found or inactive.",
     );
   }
 
@@ -34,7 +38,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   if (!brand) {
     throw new AppError(
       httpStatus.NOT_FOUND,
-      "Brand not found or inactive."
+      "Brand not found or inactive.",
     );
   }
 
@@ -46,7 +50,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   if (isSkuExists) {
     throw new AppError(
       httpStatus.CONFLICT,
-      `Product with SKU "${payload.sku}" already exists.`
+      `Product with SKU "${payload.sku}" already exists.`,
     );
   }
 
@@ -58,7 +62,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   if (isSlugExists) {
     throw new AppError(
       httpStatus.CONFLICT,
-      `Product with slug "${payload.slug}" already exists.`
+      `Product with slug "${payload.slug}" already exists.`,
     );
   }
 
@@ -69,7 +73,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Discount price must be less than regular price."
+      "Discount price must be less than regular price.",
     );
   }
 
@@ -77,7 +81,7 @@ export const createProduct = async (payload: IProduct, files:any) => {
   if (payload.stock < 0) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Stock cannot be negative."
+      "Stock cannot be negative.",
     );
   }
 
@@ -91,52 +95,44 @@ export const createProduct = async (payload: IProduct, files:any) => {
   return product;
 };
 
-
-const deleteProduct = async (productId: string) => {
+export const deleteProduct = async (productId: string) => {
   const product = await Product.findById(productId);
 
   if (!product) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Product not found."
-    );
+    throw new AppError(httpStatus.NOT_FOUND, "Product not found.");
   }
 
   if (product.status === ProductStatus.INACTIVE) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Product is already inactive."
+      "Product is already inactive.",
     );
   }
 
-  const deletedProduct =
-    await Product.findByIdAndUpdate(
-      productId,
-      {
-        $set: {
-          status: ProductStatus.INACTIVE,
-        },
+  const deletedProduct = await Product.findByIdAndUpdate(
+    productId,
+    {
+      $set: {
+        status: ProductStatus.INACTIVE,
       },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
 
   return deletedProduct;
 };
 export const updateProduct = async (
   productId: string,
-  payload: Partial<IProduct>
+  payload: Partial<IProduct>,
 ) => {
   // 1. Check product exists
   const product = await Product.findById(productId);
 
   if (!product) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Product not found."
-    );
+    throw new AppError(httpStatus.NOT_FOUND, "Product not found.");
   }
 
   // 2. Check category if category is being updated
@@ -149,7 +145,7 @@ export const updateProduct = async (
     if (!category) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        "Category not found or inactive."
+        "Category not found or inactive.",
       );
     }
   }
@@ -164,7 +160,7 @@ export const updateProduct = async (
     if (!brand) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        "Brand not found or inactive."
+        "Brand not found or inactive.",
       );
     }
   }
@@ -179,7 +175,7 @@ export const updateProduct = async (
     if (existingSku) {
       throw new AppError(
         httpStatus.CONFLICT,
-        `Product with SKU "${payload.sku}" already exists.`
+        `Product with SKU "${payload.sku}" already exists.`,
       );
     }
   }
@@ -194,16 +190,14 @@ export const updateProduct = async (
     if (existingSlug) {
       throw new AppError(
         httpStatus.CONFLICT,
-        `Product with slug "${payload.slug}" already exists.`
+        `Product with slug "${payload.slug}" already exists.`,
       );
     }
   }
 
   // 6. Validate price and discount price
   const finalPrice =
-    payload.price !== undefined
-      ? payload.price
-      : product.price;
+    payload.price !== undefined ? payload.price : product.price;
 
   const finalDiscountPrice =
     payload.discountPrice !== undefined
@@ -216,18 +210,15 @@ export const updateProduct = async (
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Discount price must be less than regular price."
+      "Discount price must be less than regular price.",
     );
   }
 
   // 7. Validate stock
-  if (
-    payload.stock !== undefined &&
-    payload.stock < 0
-  ) {
+  if (payload.stock !== undefined && payload.stock < 0) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Stock cannot be negative."
+      "Stock cannot be negative.",
     );
   }
 
@@ -240,7 +231,7 @@ export const updateProduct = async (
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
     .populate("category", "name slug")
     .populate("brand", "name slug");
@@ -248,9 +239,37 @@ export const updateProduct = async (
   return updatedProduct;
 };
 
-export const getAllProduct = async()=>{
-  const products = await Product.find();
-  return products
-}
+export const getSingleProduct = async (productId: string) => {
+  const product = await Product.findById(productId)
+    .populate("category", "name slug")
+    .populate("brand", "name slug");
 
+  if (!product) {
+    throw new AppError(httpStatus.NOT_FOUND, "Product not found.");
+  }
 
+  return product;
+};
+
+export const getAllProduct = async (
+  query: Record<string, unknown>,
+) => {
+  const productQuery = new QueryBuilder(
+    Product.find()
+      .populate("category", "name slug")
+      .populate("brand", "name slug"),
+    query,
+  )
+    .search(PRODUCT_SEARCH_FIELDS)
+    .filter()
+    .sort()
+    .select()
+    .paginate();
+
+  const [data, meta] = await Promise.all([
+    productQuery.build(),
+    productQuery.getMeta(),
+  ]);
+
+  return { data, meta };
+};
